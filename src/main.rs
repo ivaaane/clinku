@@ -6,7 +6,7 @@ pub mod output;
 async fn main() -> Result<(), reqwest::Error> {
     let args: Vec<String> = std::env::args().collect();
     if args.len() == 1 {
-        panic!("One argument is needed");
+        print_help();
     }
 
     let json = request::fetch_api(&args[1]).await?;
@@ -14,4 +14,8 @@ async fn main() -> Result<(), reqwest::Error> {
     output::output_data(&word);
 
     Ok(())
+}
+
+fn print_help() {
+    println!("TO DO!!!");
 }
