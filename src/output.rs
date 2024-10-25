@@ -3,12 +3,12 @@ use colored::*;
 
 pub fn format_output(entry: &str, data: String) {
     if data.len() > 0 {
-        println!("  {}\n    {}\n", entry.bold(), data);
+        println!("\n  {}\n    {}", entry.bold(), data);
     }
 }
 
 pub fn output_data(word: &Word) {
-    println!("{}\n", word.word.bold()); 
+    println!("{}", word.word.bold()); 
     format_output("usage", format!("{} ({})", word.usage, word.book));
     format_output("definition", word.definition.to_string());
 
@@ -27,6 +27,4 @@ pub fn output_data(word: &Word) {
         .map(|s| s.to_string())
         .collect();
     format_output("see also", see_also.join(", "));
-
-    println!("{}{}", "https://linku.la/words/".bright_black(), word.word.bright_black());
 }

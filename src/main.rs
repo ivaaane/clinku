@@ -7,9 +7,11 @@ async fn main() -> Result<(), reqwest::Error> {
     let args: Vec<String> = std::env::args().collect();
     if args.len() == 1 {
         print_help();
+        std::process::exit(0);
     }
 
-    let json = request::fetch_api(&args[1]).await?;
+    let sandbox = args.contains(&"--sandbox".to_string());
+    let json = request::fetch_api(&args[1], sandbox).await?;
     let word = word::Word::new(&json);
     output::output_data(&word);
 
