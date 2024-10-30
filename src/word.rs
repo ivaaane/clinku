@@ -1,5 +1,6 @@
 use serde_json::{Map, Value};
 
+#[derive(Clone)]
 pub struct Word {
     pub word: String,
     pub book: String,
