@@ -1,31 +1,33 @@
 use crate::word::Word;
 use colored::*;
 
-pub fn format_output(entry: &str, data: String) {
-    if data.len() > 0 {
-        println!("\n  {}\n    {}", entry.bold(), data);
+pub fn format_output(entry: &str, data: String, header: bool) {
+    if !data.is_empty() {
+        if header {
+            print!("{}: ", entry.bold().underline());
+        }
+        print!("{}\n", data);
     }
 }
 
 pub fn output_data(word: Word, args: Option<&str>) {
     let mode = OutputMode::new(word.clone());
 
-    println!("{}", word.word.bold()); 
     match args {
         Some(m) => match m {
-            "usage" => mode.usage(),
-            "definition" => mode.definition(),
-            "etymology" => mode.etymology(),
-            "data" => mode.ku_data(),
-            "also" => mode.see_also(),
+            "usage" => mode.usage(false),
+            "definition" => mode.definition(false),
+            "etymology" => mode.etymology(false),
+            "data" => mode.ku_data(false),
+            "also" => mode.see_also(false),
             _ => std::process::exit(1),
         },
         None => {
-            mode.usage();
-            mode.definition();
-            mode.etymology();
-            mode.ku_data();
-            mode.see_also();
+            mode.usage(true);
+            mode.definition(true);
+            mode.etymology(true);
+            mode.ku_data(true);
+            mode.see_also(true);
         }
     }
 }
@@ -39,37 +41,46 @@ impl OutputMode {
         OutputMode { word }
     }
 
-    fn usage(&self) {
+    fn usage(&self, header: bool) {
         format_output("usage", format!(
-            "{} ({})", self.word.usage, self.word.book)
-        );
+            "{} ({})", self.word.usage, self.word.book),
+        header);
     }
 
-    fn definition(&self) {
-        format_output("definition", self.word.definition.to_string());
+    fn definition(&self, header: bool) {
+        format_output("definition", self.word.definition.to_string(), header);
     }
 
-    fn etymology(&self) {
+    fn etymology(&self, header: bool) {
         let etymology: Vec<String> = self.word.etymology.iter()
             .map(|(_, value)| value.to_string())
             .collect();
         format_output("etymology", format!(
-            "{}: {}", self.word.source_lang, etymology.join("; ")
-        ));
+            "{} {}", self.word.source_lang, etymology.join("; ")
+        ), header);
     }
 
-    fn ku_data(&self) {
+    fn ku_data(&self, header: bool) {
         let ku_data: Vec<String> = self.word.ku_data.iter()
-            .map(|(key, value)| format!("{}: {}%", key, value))
+            .map(|(key, value)| {
+                let percent = match value.as_i64().unwrap_or(0) {
+                    0..=20 => "²",
+                    21..=50 => "³",
+                    51..=75 => "⁴",
+                    76..=100 => "⁵",
+                    _ => "?",
+                };
+                format!("{}{}", key, percent)
+            })
             .collect();
-        format_output("ku data", ku_data.join(", "));
+        format_output("ku data", ku_data.join(", "), header);
     }
 
-    fn see_also(&self) {
+    fn see_also(&self, header: bool) {
         let see_also: Vec<String> = self.word.see_also.iter()
             .filter_map(|value| value.as_str())
             .map(|s| s.to_string())
             .collect();
-        format_output("see also", see_also.join(", "));
+        format_output("see also", see_also.join(", "), header);
     }
 }
