@@ -1,16 +1,39 @@
 use crate::word::Word;
 use colored::*;
+use textwrap::{wrap, Options};
 
 // format output to make it *pretty*
 pub fn format_output(entry: &str, data: String, header: bool) {
+    // get the size of the terminal
+    // this is for the text wrapping
+    let width: usize;
+    let size = termsize::get();
+    match size {
+        Some(dimension) => width = dimension.cols.try_into().unwrap(),
+        None => width = 1,
+    }
+    
+    // use textwrap to wrap text and make it *pretty*
+    let data_wrap = wrap(
+        &data,
+        Options::new(width - entry.len() + 2)
+            .subsequent_indent(&" ".repeat(entry.len() + 2))
+    ).join("\n");
+
+    // and then, print
     if !data.is_empty() { // don't print anything if the field is empty
-        // if only one field is outputted, then don't print the
-        // header. if all fields were present, we do need it to
-        // differenciate.
         if header {
-            print!("{}: ", entry.bold().underline());
+            // if only one field is outputted, then don't print the
+            // header. if all fields were present, we do need it to
+            // differenciate.
+            println!("{}: {}\n", entry.bold().underline(), data_wrap);
+        } else {
+            // the data, however is always present
+            // in case the header isn't pressent, use plain
+            // text instead of prettifying. this is because
+            // single field outputs are meant to be copypasted
+            println!("{}", data);
         }
-        print!("{}\n", data); // the data however is always present
     }
 }
 
@@ -56,13 +79,13 @@ impl OutputMode {
     // the following are the fields
 
     fn usage(&self, header: bool) {
-        format_output("usage", format!(
+        format_output("Usage", format!(
             "{} ({})", self.word.usage, self.word.book),
         header);
     }
 
     fn definition(&self, header: bool) {
-        format_output("definition", self.word.definition.to_string(), header);
+        format_output("Definition", self.word.definition.to_string(), header);
     }
 
     // fields consisting of vectors or hashmaps need special treatment to extract
@@ -71,7 +94,7 @@ impl OutputMode {
         let etymology: Vec<String> = self.word.etymology.iter()
             .map(|(_, value)| value.to_string())
             .collect();
-        format_output("etymology", format!(
+        format_output("Etymology", format!(
             "{} {}", self.word.source_lang, etymology.join("; ")
         ), header);
     }
@@ -99,6 +122,6 @@ impl OutputMode {
             .filter_map(|value| value.as_str())
             .map(|s| s.to_string())
             .collect();
-        format_output("see also", see_also.join(", "), header);
+        format_output("See also", see_also.join(", "), header);
     }
 }
