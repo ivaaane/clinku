@@ -16,7 +16,7 @@ pub fn format_output(entry: &str, data: String, header: bool) {
     // use textwrap to wrap text and make it *pretty*
     let data_wrap = wrap(
         &data,
-        Options::new(width - entry.len() + 2)
+        Options::new(width - (entry.len() + 2))
             .subsequent_indent(&" ".repeat(entry.len() + 2))
     ).join("\n");
 
