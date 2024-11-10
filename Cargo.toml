@@ -1,6 +1,6 @@
 [package]
 name = "clinku"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["ivaaan"]
 edition = "2021"
 description = "A CLI to interact with the Linku dictionary"

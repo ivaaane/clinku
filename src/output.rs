@@ -4,6 +4,9 @@ use textwrap::{wrap, Options};
 
 // format output to make it *pretty*
 pub fn format_output(entry: &str, data: String, header: bool) {
+     // don't print anything if the field is empty
+    if data.is_empty() { return }
+
     // get the size of the terminal
     // this is for the text wrapping
     let width: usize;
@@ -14,26 +17,29 @@ pub fn format_output(entry: &str, data: String, header: bool) {
     }
     
     // use textwrap to wrap text and make it *pretty*
-    let data_wrap = wrap(
+    let first_line = &wrap(
         &data,
-        Options::new(width - (entry.len() + 2))
+        Options::new(width - (entry.len() * 2))
+    )[0];
+    let next_lines = &wrap(
+        &data,
+        Options::new(width - entry.len())
             .subsequent_indent(&" ".repeat(entry.len() + 2))
-    ).join("\n");
+    )[1..].join("\n");
+    let data_wrap = format!("{}\n{}", first_line, next_lines);
 
     // and then, print
-    if !data.is_empty() { // don't print anything if the field is empty
-        if header {
-            // if only one field is outputted, then don't print the
-            // header. if all fields were present, we do need it to
-            // differenciate.
-            println!("{}: {}\n", entry.bold().underline(), data_wrap);
-        } else {
-            // the data, however is always present
-            // in case the header isn't pressent, use plain
-            // text instead of prettifying. this is because
-            // single field outputs are meant to be copypasted
-            println!("{}", data);
-        }
+    if header {
+        // if only one field is outputted, then don't print the
+        // header. if all fields were present, we do need it to
+        // differenciate.
+        println!("{}: {}", entry.bold().underline(), data_wrap);
+    } else {
+        // the data, however is always present
+        // in case the header isn't pressent, use plain
+        // text instead of prettifying. this is because
+        // single field outputs are meant to be copypasted
+        println!("{}", data);
     }
 }
 
