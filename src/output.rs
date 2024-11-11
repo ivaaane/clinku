@@ -17,6 +17,10 @@ pub fn format_output(entry: &str, data: String, header: bool) {
     }
     
     // use textwrap to wrap text and make it *pretty*
+
+    // a differenciation is made between the first line and the
+    // other lines, because the first line needs its limit to
+    // be the double of the normal one (reasons).
     let first_line = &wrap(
         &data,
         Options::new(width - (entry.len() * 2))
@@ -26,19 +30,16 @@ pub fn format_output(entry: &str, data: String, header: bool) {
         Options::new(width - entry.len())
             .subsequent_indent(&" ".repeat(entry.len() + 2))
     )[1..].join("\n");
+    // both are then joined and like nothing happened
     let data_wrap = format!("{}\n{}", first_line, next_lines);
 
-    // and then, print
     if header {
         // if only one field is outputted, then don't print the
-        // header. if all fields were present, we do need it to
-        // differenciate.
+        // header. if all fields were present, we do need it
         println!("{}: {}", entry.bold().underline(), data_wrap);
     } else {
-        // the data, however is always present
         // in case the header isn't pressent, use plain
-        // text instead of prettifying. this is because
-        // single field outputs are meant to be copypasted
+        // text instead of making it look good
         println!("{}", data);
     }
 }
