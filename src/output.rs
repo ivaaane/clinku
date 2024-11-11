@@ -25,12 +25,21 @@ pub fn format_output(entry: &str, data: String, header: bool) {
         &data,
         Options::new(width - (entry.len() * 2))
     )[0];
-    let next_lines = &wrap(
+
+    let next_lines = wrap(
         &data,
         Options::new(width - entry.len())
             .subsequent_indent(&" ".repeat(entry.len() + 2))
     )[1..].join("\n");
-    // both are then joined and like nothing happened
+    
+    // a newline is needed in the end if more than one line exists
+    let next_lines = if next_lines.is_empty() {
+        next_lines
+    } else {
+        next_lines + "\n" 
+    }; // honestly i hate this
+
+    // both parts are then joined and like nothing happened
     let data_wrap = format!("{}\n{}", first_line, next_lines);
 
     if header {
