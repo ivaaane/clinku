@@ -19,9 +19,9 @@ async fn main() -> Result<(), Error> {
         Some("definition")
     } else if matches.get_flag("etymology") {
         Some("etymology")
-    } else if matches.get_flag("data") {
+    } else if matches.get_flag("ku") {
         Some("data")
-    } else if matches.get_flag("also") {
+    } else if matches.get_flag("see_also") {
         Some("also")
     } else {
         None // if no flag, it'll output all data
@@ -44,10 +44,10 @@ fn cli() -> Command {
         .arg(arg!(<WORD> "The word to search up")) // mandatory arg
 
         // optional flags
-        .arg(arg!(--sandbox "Search for words in the sandbox"))
-        .arg(arg!(--usage "Only show the usage"))
-        .arg(arg!(--definition "Only show the definition"))
-        .arg(arg!(--etymology "Only show the etymology"))
-        .arg(arg!(--data "Only show the ku data"))
-        .arg(arg!(--also "Only show the 'see also'"))
+        .arg(arg!(-s --sandbox "Search for words in the sandbox"))
+        .arg(arg!(-u --usage "Only show the usage"))
+        .arg(arg!(-d --definition "Only show the definition"))
+        .arg(arg!(-e --etymology "Only show the etymology"))
+        .arg(arg!(-k --ku "Only show the ku data"))
+        .arg(arg!(-a --see_also "Only show the 'see also'"))
 }
