@@ -11,6 +11,7 @@ pub struct Word {
     pub see_also: Vec<Value>,
     pub source_lang: String,
     pub etymology: Map<String, Value>,
+    pub commentary: String,
 }
 
 impl Word {
@@ -37,6 +38,8 @@ impl Word {
                 // in etymology, we only get the first item of the vector
                 .as_array().unwrap_or(&Vec::new()).clone()[0]
                 .as_object().unwrap_or(&Map::new()).clone(),
+            commentary: json["translations"]["en"]["commentary"]
+                .as_str().unwrap_or("").to_string(),
         }
     }
 }

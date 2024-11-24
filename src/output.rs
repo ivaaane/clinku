@@ -68,14 +68,16 @@ pub fn output_data(word: Word, args: Option<&str>) {
             "etymology" => mode.etymology(false),
             "data" => mode.ku_data(false),
             "also" => mode.see_also(false),
+            "commentary" => mode.commentary(false),
             _ => std::process::exit(1), // this shouldn't happen
         },
         // if no arguments, print everything
         None => {
-            mode.usage(true);
             mode.definition(true);
-            mode.etymology(true);
             mode.ku_data(true);
+            mode.etymology(true);
+            mode.usage(true);
+            mode.commentary(true);
             mode.see_also(true);
         }
     }
@@ -139,5 +141,9 @@ impl OutputMode {
             .map(|s| s.to_string())
             .collect();
         format_output("See also", see_also.join(", "), header);
+    }
+
+    fn commentary(&self, header: bool) {
+        format_output("Commentary", self.word.commentary.to_string(), header);
     }
 }
