@@ -69,6 +69,7 @@ pub fn output_data(word: Word, args: Option<&str>) {
             "data" => mode.ku_data(false),
             "also" => mode.see_also(false),
             "commentary" => mode.commentary(false),
+            "creator" => mode.creator(false),
             _ => std::process::exit(1), // this shouldn't happen
         },
         // if no arguments, print everything
@@ -76,6 +77,7 @@ pub fn output_data(word: Word, args: Option<&str>) {
             mode.definition(true);
             mode.ku_data(true);
             mode.etymology(true);
+            mode.creator(true);
             mode.usage(true);
             mode.commentary(true);
             mode.see_also(true);
@@ -145,5 +147,13 @@ impl OutputMode {
 
     fn commentary(&self, header: bool) {
         format_output("Commentary", self.word.commentary.to_string(), header);
+    }
+
+    fn creator(&self, header: bool) {
+        let see_also: Vec<String> = self.word.creator.iter()
+            .filter_map(|value| value.as_str())
+            .map(|s| s.to_string())
+            .collect();
+        format_output("Creator", see_also.join(", "), header);
     }
 }

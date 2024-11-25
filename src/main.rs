@@ -25,6 +25,8 @@ async fn main() -> Result<(), Error> {
         Some("also")
     } else if matches.get_flag("commentary") {
         Some("commentary")
+    } else if matches.get_flag("creator") {
+        Some("creator")
     } else {
         None // if no flag, it'll output all data
     };
@@ -53,4 +55,5 @@ fn cli() -> Command {
         .arg(arg!(-k --ku "Only show the ku data"))
         .arg(arg!(-a --see_also "Only show the 'see also'"))
         .arg(arg!(-c --commentary "Only show the commentary"))
+        .arg(arg!(-b --creator "Only show the creator/s"))
 }

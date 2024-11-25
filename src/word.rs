@@ -12,6 +12,7 @@ pub struct Word {
     pub source_lang: String,
     pub etymology: Map<String, Value>,
     pub commentary: String,
+    pub creator: Vec<Value>,
 }
 
 impl Word {
@@ -40,6 +41,8 @@ impl Word {
                 .as_object().unwrap_or(&Map::new()).clone(),
             commentary: json["translations"]["en"]["commentary"]
                 .as_str().unwrap_or("").to_string(),
+            creator: json["creator"]
+                .as_array().unwrap_or(&Vec::new()).clone(),
         }
     }
 }
