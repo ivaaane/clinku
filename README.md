@@ -1,22 +1,13 @@
 # Clinku
 
 [*lipu Linku*](https://linku.la) is an online dictionary for the constructed language toki
-pona. It is supported by the public dataset *sona Linku* and the annual surveys *wile Linku*. It contains information about the definition,
-historical data, usage, creation, writing, pronunciation, etymology and
-etc. of each word in the language.
+pona, made possible by the public dataset *sona Linku* and the annual surveys *wile Linku*.
+It presents information about the definition, historical data, usage, creation, writing,
+pronunciation, etymology and etc. of each word in the language.
 
-Clinku (CLI + Linku) is an unofficial frontend of sona Linku for the
-command line interface.
+Clinku (CLI + Linku) is an unofficial CLI for *sona Linku*.
 
 ## Install
-
-Latest stable release
-
-```sh
-cargo install clinku
-```
-
-Latest git commit
 
 ```sh
 cargo install --git https://github.com/ivaaane/clinku
